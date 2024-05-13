@@ -1,0 +1,136 @@
+@import '~highcharts/css/highcharts.css'
+@import '~vuetify/src/styles/styles.sass'
+
+// 從 Vuetify 提供的 Color 來建立漸層
+@each $colorName, $color in $colors
+  #vertical-gradient-#{$colorName}-stop-0,
+  #horizontal-gradient-#{$colorName}-stop-0
+    stop-color: map-get($color, accent-1)
+
+  #vertical-gradient-#{$colorName}-stop-1,
+  #horizontal-gradient-#{$colorName}-stop-1
+    stop-color: map-get($color, accent-2)
+
+.v-application
+  &.theme--light,
+  &.theme--dark
+    --highcharts-background-color: transparent
+
+  &.theme--light
+    .highcharts
+      &-axis-line,
+      &-tick,
+      &-grid-line
+        stroke: map-get($grey, lighten-3)
+
+      &-axis-labels
+        fill: map-get($grey, base)
+
+      &-pie-series
+        .highcharts-point
+          stroke: white
+
+      &-legend-box
+        stroke: map-get($grey, lighten-3)
+
+      &-legend-item
+        text
+          fill: map-get($grey, base)
+
+      &-legend-navigation
+        fill: map-get($grey, darken-1)
+
+      &-tooltip-box
+        fill: white
+        stroke-width: 3px
+        stroke: transparentize(map-get($grey, lighten-3), .5)
+
+      &-tooltip
+        text
+          fill: map-get($grey, darken-1)
+
+  &.theme--dark
+    .highcharts
+      &-axis-line,
+      &-tick
+        stroke: map-get($grey, darken-3)
+
+      &-axis-labels
+        fill: map-get($grey, darken-1)
+
+      &-pie-series
+        .highcharts-point
+          stroke: #1E1E1E
+
+      &-legend-box
+        stroke: map-get($grey, darken-2)
+
+      &-legend-item
+        text
+          fill: map-get($grey, darken-1)
+
+      &-tooltip-box
+        fill: map-get($grey, darken-2)
+        stroke-width: 3px
+        stroke: transparentize(map-get($grey, darken-4), .9)
+
+      &-tooltip
+        border: 12px
+
+        text
+          fill: map-get($grey, lighent-1)
+
+.highcharts
+  &-container
+    font-family: inherit !important
+
+  &-contextbutton
+    display: none !important
+
+  &-axis-labels
+    font-size: 0.75em !important
+
+  &-column
+    .highcharts-series-hover
+      .highcharts-point
+        fill-opacity: 0.3
+
+      .highcharts-point-hover
+        fill-opacity: 1
+
+    // .highcharts-color-0,
+    // .highcharts-color-1,
+    // .highcharts-color-2,
+    // .highcharts-color-3,
+    // .highcharts-color-4,
+    // .highcharts-color-5,
+    // .highcharts-color-6
+    //   fill: url(#vertical-gradient-indigo)
+    //   stroke-opacity: 0
+
+    &.has-comparison
+      .highcharts-color-1
+        fill: #A5D7FE
+        stroke: #A5D7FE
+
+  &-spline-series
+    .highcharts-graph
+      // stroke: map-get($indigo, accent-1)
+      stroke-width: 2.5px
+
+  &-pie-series
+    .highcharts-point
+      stroke-width: 1.5px
+
+    // .highcharts-color-0,
+    // .highcharts-color-1,
+    // .highcharts-color-2,
+    // .highcharts-color-3,
+    // .highcharts-color-4,
+    // .highcharts-color-5,
+    // .highcharts-color-6
+    //   fill: url(#vertical-gradient-indigo)
+
+  &-legend-box
+    stroke-width: 1px !important
+
