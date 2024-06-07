@@ -1,0 +1,9 @@
+export const PAYMENT_TYPE = {
+  CARD: 'CARD',
+  SAVED_CARD: 'SAVED_CARD',
+  APPLE_PAY: 'APPLE_PAY',
+  GOOGLE_PAY: 'GOOGLE_PAY',
+  LINE_PAY: 'LINE_PAY',
+};
+
+export default PAYMENT_TYPE;

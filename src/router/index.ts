@@ -1,5 +1,5 @@
-import Vue from "vue";
-import VueRouter, { RouteConfig, RouterOptions } from "vue-router";
+import Vue from 'vue';
+import VueRouter, { RouteConfig, RouterOptions } from 'vue-router';
 
 Vue.use(VueRouter);
 
@@ -19,15 +19,5 @@ const routerOptions: RouterOptions = {
 };
 
 const router = new VueRouter(routerOptions);
-
-
-/** 模擬 router hooks */
-export function useRouter() {
-  return router;
-}
-
-export function useRoute() {
-  return router.currentRoute;
-}
 
 export default router;

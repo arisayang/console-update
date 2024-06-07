@@ -55,21 +55,22 @@ const zhTW = {
     sameElse: 'l',
   },
   dayOfMonthOrdinalParse: /\d{1,2}(日|月|週)/,
-  ordinal(number, period) {
-    switch (period) {
-      case 'd':
-      case 'D':
-      case 'DDD':
-        return `${number}日`;
-      case 'M':
-        return `${number}月`;
-      case 'w':
-      case 'W':
-        return `${number}週`;
-      default:
-        return number;
-    }
-  },
+  // TODO: ordinal 函數應該接受一個參數 (n: number) => string
+  // ordinal(number, period): string {
+  //   switch (period) {
+  //     case 'd':
+  //     case 'D':
+  //     case 'DDD':
+  //       return `${number}日`;
+  //     case 'M':
+  //       return `${number}月`;
+  //     case 'w':
+  //     case 'W':
+  //       return `${number}週`;
+  //     default:
+  //       return number;
+  //   }
+  // },
   relativeTime: {
     future: '%s內',
     past: '%s前',

@@ -1,0 +1,7 @@
+export const SHIPPING_PROVIDER = {
+  SEVEN_ELEVEN: 'UNIMARTC2C',
+  FAMILY_MART: 'FAMIC2C',
+  T_CAT: 'TCAT',
+};
+
+export default SHIPPING_PROVIDER;

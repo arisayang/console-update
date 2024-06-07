@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import type { Store } from 'vuex';
 import client from './client';
-import type { Store } from "vuex";
 
 Vue.use(Vuex);
 

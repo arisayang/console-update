@@ -1,12 +1,35 @@
 <template>
   <div id="app">
     Hi!
-    <router-link to="/contact-us">Go to contact-us</router-link>
+    <router-link to="/contact-us">
+      Go to contact-us
+    </router-link>
 
-    <div class="" @click="parsedCell('0912312345')">test parsePhoneNumber</div>
+    <!-- test awesome-phonenumber -->
+    <div class="" @click="parsedCell('0912312345')">
+      test parsePhoneNumber
+    </div>
 
-    <v-date-picker class="rounded-0 date-filter" range no-title color="indigo" v-model="filterSelectedDate" />
+    <!-- Tiptap -->
+    <div
+      class="rounded-xl grey px-6 py-2"
+      :class="{
+        'text--white': $vuetify.theme.dark,
+        'file-input--darken': $vuetify.theme.dark,
+        'lighten-3': !$vuetify.theme.dark,
+      }"
+    >
+      <div class="text-caption text--secondary">
+        內容介紹
+      </div>
+      <Tiptap
+        ref="editor"
+        v-model="html"
+        upload-image-route="/uploadImage/ecProduct"
+      />
+    </div>
 
+    <!-- BarChart -->
     <v-card-text>
       <BarChart :data="salesDataByChannel" :options="salesDataByChannelOptions" :height="250" />
     </v-card-text>
@@ -15,11 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import BarChart from '@/components/BarChart.vue';
 import moment from 'moment';
-import Axios from '@/helpers/axios';
 import { ref, onMounted } from 'vue';
-import { parsePhoneNumber } from 'awesome-phonenumber'
+import { parsePhoneNumber } from 'awesome-phonenumber';
+import Axios from '@/helpers/axios';
+import BarChart from '@/components/BarChart.vue';
+import Tiptap from '@/components/Tiptap.vue';
+
+const html = ref(null);
 
 const salesDataByChannel = ref();
 const salesDataByChannelOptions = ref({
@@ -63,7 +89,7 @@ const salesDataByChannelOptions = ref({
 
 const filterSelectedDate = ref([
   moment().startOf('month').format('YYYY-MM-DD'),
-  moment().endOf('month').format('YYYY-MM-DD')
+  moment().endOf('month').format('YYYY-MM-DD'),
 ]);
 
 // =================
@@ -73,7 +99,6 @@ const filterSelectedDate = ref([
 
 onMounted(() => getSalesDataByChannel());
 
-
 const getSalesDataByChannel = async () => {
   salesDataByChannel.value = null;
 
@@ -82,8 +107,8 @@ const getSalesDataByChannel = async () => {
     method: 'POST',
     path: '/voucher/salesByChannelReport',
     data: {
-      start: filterSelectedDate[0].value,
-      end: filterSelectedDate[1].value,
+      start: filterSelectedDate.value[0].value,
+      end: filterSelectedDate.value[1].value,
     },
   };
 
@@ -108,9 +133,9 @@ const getSalesDataByChannel = async () => {
 };
 
 const parsedCell = (cell) => {
-  console.log(parsePhoneNumber(cell, { regionCode: 'TW' }).number?.international)
+  console.log(parsePhoneNumber(cell, { regionCode: 'TW' }).number?.international);
   return parsePhoneNumber(cell, { regionCode: 'TW' }).number?.international;
-}
+};
 </script>
 
 <style lang="sass">

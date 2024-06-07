@@ -1,5 +1,6 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-/* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }] */
+/* eslint
+no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }] */
 
 import Vue from 'vue';
 import Vuex from 'vuex';

@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app dense :color="$vuetify.theme.dark ? null : '#FFEA00'" elevate-on-scroll>
+    <v-app-bar
+      app
+      dense
+      :color="$vuetify.theme.dark ? null : '#FFEA00'"
+      elevate-on-scroll
+    >
       <v-toolbar-title v-if="$route.meta && $route.meta.appBarTitle" class="font-weight-bold">
         {{ $route.meta.appBarTitle }}
       </v-toolbar-title>
@@ -13,17 +18,31 @@
             <v-container fluid class="px-0">
               <v-row justify="space-between" dense>
                 <v-col cols="auto">
-                  <v-menu v-model="showMenu" offset-y elevation="0" rounded="lg" nudge-bottom="8px"
-                    :close-on-content-click="false">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn text rounded v-bind="attrs" v-on="on">
-                        <v-icon left>mdi-calendar-range</v-icon>
+                  <v-menu
+                    v-model="showMenu"
+                    offset-y
+                    elevation="0"
+                    rounded="lg"
+                    nudge-bottom="8px"
+                    :close-on-content-click="false"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        rounded
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon left>
+                          mdi-calendar-range
+                        </v-icon>
                         <template v-if="filterSelectedDate[0] === filterSelectedDate[1]">
-                          {{ moment(filterSelectedDate[0]).format('l') }}
+                          {{ moment(filterSelectedDate[0]).format("l") }}
                         </template>
                         <template v-else>
-                          {{ moment(filterSelectedDate[0]).format('l') }}～{{ moment(filterSelectedDate[1]).format('l')
-                          }}
+                          {{ moment(filterSelectedDate[0]).format("l") }}
+                          ～
+                          {{ moment(filterSelectedDate[1]).format("l") }}
                         </template>
                       </v-btn>
                     </template>
@@ -31,14 +50,22 @@
                       <v-container class="pa-0">
                         <v-row no-gutters>
                           <v-col>
-                            <v-list class="grey" :class="{
-                                'grey': !$vuetify.theme.dark,
+                            <v-list
+                              class="grey"
+                              :class="{
+                                grey: !$vuetify.theme.dark,
                                 'lighten-4': !$vuetify.theme.dark,
                                 'darken-3': $vuetify.theme.dark,
-                              }" shaped dense>
+                              }"
+                              shaped
+                              dense
+                            >
                               <v-list-item-group v-model="selectedFilterSelectedDateRange">
-                                <v-list-item v-for="range in filterSelectedDateRanges" :value="range"
-                                  :key="range.range">
+                                <v-list-item
+                                  v-for="range in filterSelectedDateRanges"
+                                  :key="range.range"
+                                  :value="range"
+                                >
                                   <v-list-item-content class="text-subtitle-2">
                                     {{ range.text }}
                                   </v-list-item-content>
@@ -52,12 +79,30 @@
                             </v-list>
                           </v-col>
                           <v-col>
-                            <div style="height: 100%" class="d-flex flex-column justify-space-between">
-                              <v-date-picker class="rounded-0 date-filter" range no-title color="indigo"
-                                v-model="filterSelectedDate" />
-                              <div style="height: 100%" class="d-flex justify-end align-center px-2">
-                                <v-btn elevation="0" rounded v-on:click="onClickApplyDate"
-                                  :disabled="applyDateDisabled">套用</v-btn>
+                            <div
+                              style="height: 100%"
+                              class="d-flex flex-column
+                            justify-space-between"
+                            >
+                              <v-date-picker
+                                v-model="filterSelectedDate"
+                                class="rounded-0 date-filter"
+                                range
+                                no-title
+                                color="indigo"
+                              />
+                              <div
+                                style="height: 100%"
+                                class="d-flex justify-end align-center px-2"
+                              >
+                                <v-btn
+                                  elevation="0"
+                                  rounded
+                                  :disabled="applyDateDisabled"
+                                  @click="onClickApplyDate"
+                                >
+                                  套用
+                                </v-btn>
                               </div>
                             </div>
                           </v-col>
@@ -66,14 +111,29 @@
                     </v-card>
                   </v-menu>
                 </v-col>
-                <v-col cols="auto" v-if="selectedItems.length !== 0" transition="scroll-y-transition">
-                  <v-btn elevation="0" v-on:click="onClickExport()" text rounded>匯出</v-btn>
+                <v-col
+                  v-if="selectedItems.length !== 0"
+                  cols="auto"
+                  transition="scroll-y-transition"
+                >
+                  <v-btn
+                    elevation="0"
+                    text
+                    rounded
+                    @click="onClickExport()"
+                  >
+                    匯出
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
             <v-card rounded="lg" elevation="2">
-              <v-tabs v-model="currentTab" class="px-4" slider-size="4"
-                :color="$vuetify.theme.dark ? 'white' : 'indigo'">
+              <v-tabs
+                v-model="currentTab"
+                class="px-4"
+                slider-size="4"
+                :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+              >
                 <v-tab v-for="tab in tabs" :key="tab.token">
                   {{ tab.text }}
                 </v-tab>
@@ -83,32 +143,74 @@
                 <v-container fluid class="pa-0">
                   <v-row align="center" dense>
                     <v-col>
-                      <v-text-field dense rounded filled label="搜尋" prepend-inner-icon="mdi-magnify" hide-details
-                        clearable v-model.trim="keyword" v-on:keypress.enter="getData" />
+                      <v-text-field
+                        v-model.trim="keyword"
+                        dense
+                        rounded
+                        filled
+                        label="搜尋"
+                        prepend-inner-icon="mdi-magnify"
+                        hide-details
+                        clearable
+                        @keypress.enter="getData"
+                      />
                     </v-col>
                     <v-col cols="auto">
-                      <v-menu class="mt-4" rounded offset-y transition="scroll-y-transition" :close-on-click="false"
-                        allow-overflow max-height="500" loading loading-text="資料取得中⋯">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn v-bind="attrs" v-on="on" elevation="0"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'" text rounded>
-                            <v-icon left>mdi-eye</v-icon>
+                      <v-menu
+                        class="mt-4"
+                        rounded
+                        offset-y
+                        transition="scroll-y-transition"
+                        :close-on-click="false"
+                        allow-overflow
+                        max-height="500"
+                        loading
+                        loading-text="資料取得中⋯"
+                      >
+                        <template #activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            elevation="0"
+                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            text
+                            rounded
+                            v-on="on"
+                          >
+                            <v-icon left>
+                              mdi-eye
+                            </v-icon>
                             查看欄位
                           </v-btn>
                         </template>
                         <v-card class="pa-4">
-                          <v-checkbox dense v-model="header.display" :label="header.text"
-                            v-for="header in optionalHeaders" v-bind:key="header.text" hide-details />
+                          <v-checkbox
+                            v-for="header in optionalHeaders"
+                            :key="header.text"
+                            v-model="header.display"
+                            dense
+                            :label="header.text"
+                            hide-details
+                          />
                         </v-card>
                       </v-menu>
                     </v-col>
                   </v-row>
                 </v-container>
               </div>
-              <v-data-table v-model="selectedItems" class="rounded-lg" :headers="displayHeaders" :items="items"
-                :loading="tableLoading" item-key="idx" show-expand show-select single-expand :hide-default-footer="true"
-                :disable-pagination="true">
-                <template v-slot:top>
+              <v-data-table
+                v-model="selectedItems"
+                class="rounded-lg"
+                :headers="displayHeaders"
+                :items="items"
+                :loading="tableLoading"
+                item-key="idx"
+                show-expand
+                show-select
+                single-expand
+                :hide-default-footer="true"
+                :disable-pagination="true"
+              >
+                <template #top>
                   <v-dialog v-model="showAssignDialog" max-width="500px">
                     <v-card>
                       <v-form v-model="editedItemForm">
@@ -116,20 +218,37 @@
                           <span class="text-h5">指派「{{ editedItem.name }}」</span>
                         </v-card-title>
                         <v-card-text>
-                          <v-autocomplete filled rounded label="Vtiger 使用者" hide-details="auto"
-                            prepend-inner-icon="mdi-account" v-model="editedItemFormVtigerUser"
-                            :rules="[v => !!v || '必填項目']" :items="vTigerUsers"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'" />
-                          <v-checkbox dense v-model="isBig" label="設定為專案型自來客" hide-details></v-checkbox>
+                          <v-autocomplete
+                            v-model="editedItemFormVtigerUser"
+                            filled
+                            rounded
+                            label="Vtiger 使用者"
+                            hide-details="auto"
+                            prepend-inner-icon="mdi-account"
+                            :rules="[(v) => !!v || '必填項目']"
+                            :items="vTigerUsers"
+                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                          />
+                          <v-checkbox
+                            v-model="isBig"
+                            dense
+                            label="設定為專案型自來客"
+                            hide-details
+                          ></v-checkbox>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text rounded v-on:click="showAssignDialog = false">
+                          <v-btn text rounded @click="showAssignDialog = false">
                             取消
                           </v-btn>
-                          <v-btn text rounded :disabled="!editedItemForm" :loading="isSubmittingAssign"
-                            v-on:click="onClickSaveAssign(editedItem.idx, isBig)"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'">
+                          <v-btn
+                            text
+                            rounded
+                            :disabled="!editedItemForm"
+                            :loading="isSubmittingAssign"
+                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            @click="onClickSaveAssign(editedItem.idx, isBig)"
+                          >
                             儲存
                           </v-btn>
                         </v-card-actions>
@@ -144,19 +263,31 @@
                           <span class="text-h5">封存「{{ editedItem.name }}」</span>
                         </v-card-title>
                         <v-card-text>
-                          <v-autocomplete filled rounded label="封存原因" hide-details="auto"
-                            prepend-inner-icon="mdi-inbox-arrow-down" v-model="editedItemFormArchiveReason"
-                            :rules="[v => !!v || '必填項目']" :items="archiveReasons"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'" />
+                          <v-autocomplete
+                            v-model="editedItemFormArchiveReason"
+                            filled
+                            rounded
+                            label="封存原因"
+                            hide-details="auto"
+                            prepend-inner-icon="mdi-inbox-arrow-down"
+                            :rules="[(v) => !!v || '必填項目']"
+                            :items="archiveReasons"
+                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                          />
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text rounded v-on:click="showArchiveDialog = false">
+                          <v-btn text rounded @click="showArchiveDialog = false">
                             取消
                           </v-btn>
-                          <v-btn text rounded :disabled="!editedItemForm" :loading="isSubmittingArchive"
-                            v-on:click="onClickSaveArchive(editedItem.idx)"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'">
+                          <v-btn
+                            text
+                            rounded
+                            :disabled="!editedItemForm"
+                            :loading="isSubmittingArchive"
+                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            @click="onClickSaveArchive(editedItem.idx)"
+                          >
                             確定
                           </v-btn>
                         </v-card-actions>
@@ -165,46 +296,63 @@
                   </v-dialog>
                 </template>
 
-                <template v-slot:item.status="{ item }">
-                  <v-chip class="font-weight-bold" v-if="item.status === 'NEW'" color="indigo" dark>未指派</v-chip>
-                  <v-chip class="font-weight-bold" v-else-if="item.status === 'OPPORTUNITY'" dark>Opportunity</v-chip>
-                  <v-chip class="font-weight-bold" v-else-if="item.status === 'LEAD'" dark>Lead</v-chip>
-                  <v-chip class="font-weight-bold" v-else-if="item.status === 'ARCHIVED'">已封存</v-chip>
+                <template #item.status="{ item }">
+                  <v-chip
+                    v-if="item.status === 'NEW'"
+                    class="font-weight-bold"
+                    color="indigo"
+                    dark
+                  >
+                    未指派
+                  </v-chip>
+                  <v-chip v-else-if="item.status === 'OPPORTUNITY'" class="font-weight-bold" dark>
+                    Opportunity
+                  </v-chip>
+                  <v-chip v-else-if="item.status === 'LEAD'" class="font-weight-bold" dark>
+                    Lead
+                  </v-chip>
+                  <v-chip v-else-if="item.status === 'ARCHIVED'" class="font-weight-bold">
+                    已封存
+                  </v-chip>
                 </template>
-                <template v-slot:item.service="{ item }">
-                  <div class="py-2" v-if="item.service">
-                    <div class="my-1" v-for="service in item.service.split(',')" :key="service">
-                      <v-chip x-small>{{ service.trim() }}</v-chip>
+                <template #item.service="{ item }">
+                  <div v-if="item.service" class="py-2">
+                    <div v-for="service in item.service.split(',')" :key="service" class="my-1">
+                      <v-chip x-small>
+                        {{ service.trim() }}
+                      </v-chip>
                     </div>
                   </div>
                 </template>
 
-                <template v-slot:item.content="{ item }">
+                <template #item.content="{ item }">
                   <template v-if="item.content">
                     <v-icon>mdi-comment</v-icon>
                   </template>
                 </template>
 
-                <template v-slot:item.time="{ item }">{{ moment(item.time).format('l LT') }}</template>
+                <template #item.time="{ item }">
+                  {{ moment(item.time).format("l LT") }}
+                </template>
 
-                <template v-slot:item.assigned="{ item }">
+                <template #item.assigned="{ item }">
                   <template v-if="item.assigned">
                     <span>{{ item.assigned }}</span>
                   </template>
                   <template v-else>
-                    <v-btn icon v-on:click="onClickAssign(item)" v-if="item.status === 'NEW'">
+                    <v-btn v-if="item.status === 'NEW'" icon @click="onClickAssign(item)">
                       <v-icon>mdi-account-edit</v-icon>
                     </v-btn>
                   </template>
                 </template>
 
-                <template v-slot:item.archive="{ item }">
-                  <v-btn icon v-on:click="onClickArchive(item)" v-if="item.status === 'NEW'">
+                <template #item.archive="{ item }">
+                  <v-btn v-if="item.status === 'NEW'" icon @click="onClickArchive(item)">
                     <v-icon>mdi-inbox-arrow-down</v-icon>
                   </v-btn>
                 </template>
 
-                <template v-slot:expanded-item="{ headers, item }">
+                <template #expanded-item="{ headers, item }">
                   <td :colspan="headers.length">
                     <v-container class="my-4">
                       <v-row justify="center">
@@ -212,25 +360,33 @@
                           <v-card>
                             <v-list dense>
                               <v-list-item v-if="item.company">
-                                <v-list-item-content>公司名稱</v-list-item-content>
+                                <v-list-item-content>
+                                  公司名稱
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.company }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.businessModel">
-                                <v-list-item-content>是否為加盟店</v-list-item-content>
+                                <v-list-item-content>
+                                  是否為加盟店
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.businessModel }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.contact">
-                                <v-list-item-content>聯絡人</v-list-item-content>
+                                <v-list-item-content>
+                                  聯絡人
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.contact }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.phone">
-                                <v-list-item-content>聯絡電話</v-list-item-content>
+                                <v-list-item-content>
+                                  聯絡電話
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.phone }}
                                 </v-list-item-content>
@@ -248,39 +404,51 @@
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item>
-                                <v-list-item-content>訂閱電子報</v-list-item-content>
+                                <v-list-item-content>
+                                  訂閱電子報
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
-                                  {{ item.newsletter ? '是' : '否' }}
+                                  {{ item.newsletter ? "是" : "否" }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.utmSource">
-                                <v-list-item-content>utm_source</v-list-item-content>
+                                <v-list-item-content>
+                                  utm_source
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.utmSource }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.utmMedium">
-                                <v-list-item-content>utm_medium</v-list-item-content>
+                                <v-list-item-content>
+                                  utm_medium
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.utmMedium }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.utmCampaign">
-                                <v-list-item-content>utm_campaign</v-list-item-content>
+                                <v-list-item-content>
+                                  utm_campaign
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.utmCampaign }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.utmContent">
-                                <v-list-item-content>utm_content</v-list-item-content>
+                                <v-list-item-content>
+                                  utm_content
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
                                   {{ item.utmContent }}
                                 </v-list-item-content>
                               </v-list-item>
                               <v-list-item v-if="item.leadTime">
-                                <v-list-item-content>Leads 建立時間</v-list-item-content>
+                                <v-list-item-content>
+                                  Leads 建立時間
+                                </v-list-item-content>
                                 <v-list-item-content class="flex-column align-end text-right">
-                                  {{ moment(item.leadTime).format('l LT') }}
+                                  {{ moment(item.leadTime).format("l LT") }}
                                 </v-list-item-content>
                               </v-list-item>
                             </v-list>
@@ -300,9 +468,12 @@
 </template>
 
 <script setup lang="ts">
-import Axios from '@/helpers/axios';
 import moment from 'moment';
-import { ref, reactive, computed, watch, onBeforeMount } from 'vue';
+import {
+  ref, reactive, computed, watch, onBeforeMount, Ref,
+} from 'vue';
+// eslint-disable-next-line import/no-cycle
+import Axios from '@/helpers/axios';
 
 const showMenu = ref(false);
 const filterSelectedDateRanges = ref([
@@ -318,15 +489,21 @@ const filterSelectedDateRanges = ref([
     text: '昨天',
     range: 'YESTERDAY',
     value: [
-      new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0],
-      new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0],
+      new Date(new Date().setDate(new Date().getDate() - 1))
+        .toISOString()
+        .split('T')[0],
+      new Date(new Date().setDate(new Date().getDate() - 1))
+        .toISOString()
+        .split('T')[0],
     ],
   },
   {
     text: '本週',
     range: 'THIS_WEEK',
     value: [
-      new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0],
+      new Date(new Date().setDate(new Date().getDate() - new Date().getDay()))
+        .toISOString()
+        .split('T')[0],
       new Date().toISOString().split('T')[0],
     ],
   },
@@ -334,15 +511,25 @@ const filterSelectedDateRanges = ref([
     text: '上週',
     range: 'LAST_WEEK',
     value: [
-      new Date(new Date().setDate(new Date().getDate() - new Date().getDay() - 7)).toISOString().split('T')[0],
-      new Date(new Date().setDate(new Date().getDate() - new Date().getDay() - 1)).toISOString().split('T')[0],
+      new Date(
+        new Date().setDate(new Date().getDate() - new Date().getDay() - 7),
+      )
+        .toISOString()
+        .split('T')[0],
+      new Date(
+        new Date().setDate(new Date().getDate() - new Date().getDay() - 1),
+      )
+        .toISOString()
+        .split('T')[0],
     ],
   },
   {
     text: '過去 7 天',
     range: 'RECENT_7',
     value: [
-      new Date(new Date().setDate(new Date().getDate() - 6)).toISOString().split('T')[0],
+      new Date(new Date().setDate(new Date().getDate() - 6))
+        .toISOString()
+        .split('T')[0],
       new Date().toISOString().split('T')[0],
     ],
   },
@@ -350,15 +537,21 @@ const filterSelectedDateRanges = ref([
     text: '本月',
     range: 'THIS_MONTH',
     value: [
-      new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
-      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0],
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        .toISOString()
+        .split('T')[0],
+      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+        .toISOString()
+        .split('T')[0],
     ],
   },
   {
     text: '過去 30 天',
     range: 'RECENT_30',
     value: [
-      new Date(new Date().setDate(new Date().getDate() - 29)).toISOString().split('T')[0],
+      new Date(new Date().setDate(new Date().getDate() - 29))
+        .toISOString()
+        .split('T')[0],
       new Date().toISOString().split('T')[0],
     ],
   },
@@ -366,7 +559,13 @@ const filterSelectedDateRanges = ref([
     text: '過去一年',
     range: 'RECENT_YEAR',
     value: [
-      new Date(new Date().getFullYear() - 1, new Date().getMonth(), new Date().getDate()).toISOString().split('T')[0],
+      new Date(
+        new Date().getFullYear() - 1,
+        new Date().getMonth(),
+        new Date().getDate(),
+      )
+        .toISOString()
+        .split('T')[0],
       new Date().toISOString().split('T')[0],
     ],
   },
@@ -374,13 +573,13 @@ const filterSelectedDateRanges = ref([
 const selectedFilterSelectedDateRange = ref('THIS_MONTH');
 const filterSelectedDate = ref([
   moment().startOf('month').format('YYYY-MM-DD'),
-  moment().endOf('month').format('YYYY-MM-DD')
+  moment().endOf('month').format('YYYY-MM-DD'),
 ]);
 const selectedDate = ref([
   moment().subtract(29, 'days').format('YYYY-MM-DD'),
-  moment().format('YYYY-MM-DD')
+  moment().format('YYYY-MM-DD'),
 ]);
-const applyDateDisabled = ref(false);
+const applyDateDisabled: Ref<boolean> = ref(false);
 const currentTab = ref(0);
 const currentTabType = ref('NEW');
 const tabs = ref([
@@ -681,19 +880,19 @@ const isBig = ref(false);
 // computed
 //
 
-const optionalHeaders = computed(() => {
-  return headers.value.filter((header) => !header.display);
-});
+const optionalHeaders = computed(() => headers.value.filter((header) => !header.display));
 
-const displayHeaders = computed(() => {
-  return headers.value.filter((header) => header.display);
-});
+const displayHeaders = computed(() => headers.value.filter((header) => header.display));
 
 const csvFields = computed(() => {
-  const fields: { label: string, value: string, exportSort: number }[] = [];
+  const fields: { label: string; value: string; exportSort: number }[] = [];
 
   headers.value.forEach((item) => {
-    if (item.text === '' || item.value === 'archive' || item.exportSort === undefined) return;
+    if (
+      item.text === ''
+      || item.value === 'archive'
+      || item.exportSort === undefined
+    ) return;
     fields.push({
       label: item.text,
       value: item.value,
@@ -722,7 +921,12 @@ watch(selectedFilterSelectedDateRange, (range: any) => {
 
 watch(currentTab, () => getData());
 
-watch(filterSelectedDate, () => applyDateDisabled.value = filterSelectedDate.value.length !== 2);
+watch(
+  filterSelectedDate,
+  () => {
+    applyDateDisabled.value = filterSelectedDate.value.length !== 2;
+  },
+);
 
 watch(keyword, (value) => {
   if (value === '') {
@@ -756,7 +960,7 @@ const getData = () => {
   items.value = [];
   getTabType();
 
-  const data: { type: string, start: string, end: string, keyword?: string } = {
+  const data: { type: string; start: string; end: string; keyword?: string } = {
     type: currentTabType.value,
     start: filterSelectedDate.value[0],
     end: filterSelectedDate.value[1],
@@ -823,22 +1027,23 @@ const getData = () => {
   }, 1000);
 };
 
-const convertToCSV = (roesData: any, headers: any, withBOM?: false) => {
-  const header = headers.map((headerItem: any) => `"${headerItem.label}"`).join(',');
-  const rows = roesData.map((obj: any) => {
-    return headers.map((headerItem: any) => {
+const convertToCSV = (selected: any, headersData: any, withBOM?: false) => {
+  const header = headersData
+    .map((headerItem: any) => `"${headerItem.label}"`)
+    .join(',');
+  const rows = selected.map((obj: any) => headersData
+    .map((headerItem: any) => {
       const value = obj[headerItem.value];
       if (typeof value === 'string') {
         return `"${value}"`;
-      } else {
-        return value === null ? '' : value;
       }
-    }).join(',');
-  });
+      return value === null ? '' : value;
+    })
+    .join(','));
 
   if (withBOM) {
     const utf8BOM = '\uFEFF';
-    return utf8BOM + `${header}\n${rows.join('\n')}`;
+    return `${utf8BOM}${header}\n${rows.join('\n')}`;
   }
   return `${header}\n${rows.join('\n')}`;
 };
@@ -884,7 +1089,7 @@ const onClickAssign = (item) => {
   getVtigetUsers();
 };
 
-const onClickSaveAssign = (id, isBig) => {
+const onClickSaveAssign = (id, isBigData) => {
   isSubmittingAssign.value = true;
 
   Axios({
@@ -892,7 +1097,7 @@ const onClickSaveAssign = (id, isBig) => {
     url: `/root/contact/${id}`,
     data: {
       assign: editedItemFormVtigerUser.value,
-      isBig,
+      isBigData,
     },
   })
     .then((response) => {
@@ -911,7 +1116,7 @@ const onClickSaveAssign = (id, isBig) => {
 const onClickArchive = (item) => {
   Object.assign(editedItem, item);
   showArchiveDialog.value = true;
-}
+};
 
 const onClickSaveArchive = (id) => {
   isSubmittingArchive.value = true;
@@ -934,15 +1139,14 @@ const onClickSaveArchive = (id) => {
     .catch(() => {
       isSubmittingArchive.value = false;
     });
-}
+};
 
 const onClickApplyDate = () => {
   showMenu.value = false;
   selectedDate.value = filterSelectedDate.value;
 
   getData();
-}
-
+};
 </script>
 
 <style lang="sass">

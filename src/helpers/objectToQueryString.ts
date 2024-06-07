@@ -1,6 +1,6 @@
 /* eslint-disable */
-function objectToQueryString(obj, prefix = '') {
-  const queryParams = [];
+function objectToQueryString(obj:any , prefix = ''):string {
+  const queryParams: string[] = [];
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {

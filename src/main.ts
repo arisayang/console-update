@@ -1,10 +1,11 @@
-import Vue from "vue";
-import App from "./App.vue";
+import Vue from 'vue';
 import VuetifyDialog from 'vuetify-dialog';
+import VueSanitize from 'vue-sanitize';
 import VueMoment from 'vue-moment';
 import * as moment from 'moment';
+import router from '@/router';
+import App from './App.vue';
 import vuetify from './plugins/vuetify';
-import router from '@/router'
 
 import 'vuetify-dialog/dist/vuetify-dialog.css';
 
@@ -21,10 +22,12 @@ Vue.use(VuetifyDialog, {
   },
 });
 
+Vue.use(VueSanitize);
+
 Vue.config.productionTip = false;
 
 new Vue({
   vuetify,
   router,
-  render: h => h(App)
-}).$mount("#app");
+  render: (h) => h(App),
+}).$mount('#app');

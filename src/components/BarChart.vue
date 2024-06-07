@@ -1,8 +1,11 @@
 <template>
   <div>
     <template v-if="chartData">
-      <Bar :chart-options="options ? { ...options, ...chartOptions } : chartOptions" :data="chartData"
-        :style="`height: ${height ? height + 'px' : 'auto'}`" />
+      <Bar
+        :chart-options="options ? { ...options, ...chartOptions } : chartOptions"
+        :data="chartData"
+        :style="`height: ${height ? height + 'px' : 'auto'}`"
+      />
     </template>
     <template v-else>
       <div class="py-16 text-center">
@@ -24,15 +27,6 @@ ChartJS.defaults.borderColor = 'rgba(0, 0, 0, .05)';
 ChartJS.defaults.font.family = 'Montserrat, -apple-system, BlinkMacSystemFont, sans-serif';
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-// type BarChartData = {
-//   labels: string[];
-//   datasets: {
-//     label: string;
-//     backgroundColor: string;
-//     data: number[];
-//   }[];
-// };
-
 // =================
 //
 // define
@@ -41,12 +35,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 defineProps({
   options: {
     type: Object,
-    default: null
-  },
-  chartData: {
-    type: Object,
-    // type: Object as PropType<BarChartData>,
-    required: true
+    default: null,
   },
   height: {
     type: Number,
@@ -56,7 +45,12 @@ defineProps({
     type: String,
     default: '',
   },
-})
+});
+
+const chartData = ref({
+  labels: ['January', 'February', 'March'],
+  datasets: [{ data: [40, 20, 12] }],
+});
 
 const chartOptions = ref({
   responsive: true,
