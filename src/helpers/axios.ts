@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 
 import router from '../router/index';
-import store from '../store/index';
+import { clearCtk } from '../store/client';
 
 const baseURL = process.env.VUE_APP_CONSOLE_API || 'https://api-console.ocard.co';
 
@@ -38,7 +38,7 @@ Axios.interceptors.response.use(
         })
           .then(() => {
             if (error.response?.data?.logout) {
-              store.commit('clearCtk');
+              clearCtk();
             }
 
             if (error.response?.data?.redirect) {
@@ -55,7 +55,7 @@ Axios.interceptors.response.use(
           });
       } else {
         if (error.response?.data?.logout) {
-          store.commit('clearCtk');
+          clearCtk();
         }
 
         if (error.response?.data?.redirect) {

@@ -2,11 +2,7 @@
 /* eslint
 no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }] */
 
-import Vue from 'vue';
-import Vuex from 'vuex';
 import Cookies from 'js-cookie';
-
-Vue.use(Vuex);
 
 const state = {
   ctk: Cookies.get('ctk') || null,
@@ -21,7 +17,7 @@ const mutations = {
       Cookies.set('ctk', ctk, { expires: 3560, domain: '.ocard.co', path: '/' });
     }
   },
-  clearCtk(state) {
+  clearCtk() {
     state.ctk = null;
     Cookies.remove('ctk', { domain: 'ocard.co' });
     Cookies.remove('ctk', { domain: '.ocard.co' });
@@ -29,7 +25,8 @@ const mutations = {
   },
 };
 
+export const { clearCtk } = mutations;
+
 export default {
   state,
-  mutations,
 };

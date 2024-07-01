@@ -4,7 +4,7 @@
       <Bar
         :chart-options="options ? { ...options, ...chartOptions } : chartOptions"
         :data="chartData"
-        :style="`height: ${height ? height + 'px' : 'auto'}`"
+        :style="`height: ${height ? `${height}px` : 'auto'}`"
       />
     </template>
     <template v-else>

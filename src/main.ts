@@ -1,33 +1,24 @@
-import Vue from 'vue';
-import VuetifyDialog from 'vuetify-dialog';
-import VueSanitize from 'vue-sanitize';
-import VueMoment from 'vue-moment';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import * as moment from 'moment';
+import Vue3Sanitize from 'vue-3-sanitize';
 import router from '@/router';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
-
-import 'vuetify-dialog/dist/vuetify-dialog.css';
 
 import { zhTW } from './helpers/moment-locale';
 
 moment.locale('zh-Hant-my-settings', zhTW);
 moment.defineLocale('zh-Hant', { parentLocale: 'zh-TW' });
 
-Vue.use(VueMoment, { moment });
+const app = createApp(App);
+const pinia = createPinia();
 
-Vue.use(VuetifyDialog, {
-  context: {
-    vuetify,
-  },
-});
+app.config.globalProperties.$moment = moment;
 
-Vue.use(VueSanitize);
+app.use(pinia);
+app.use(router);
+app.use(vuetify);
+app.use(Vue3Sanitize);
 
-Vue.config.productionTip = false;
-
-new Vue({
-  vuetify,
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+app.mount('#app');

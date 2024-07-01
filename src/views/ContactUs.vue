@@ -1,13 +1,12 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      dense
-      :color="$vuetify.theme.dark ? null : '#FFEA00'"
-      elevate-on-scroll
+      density="comfortable"
+      scroll-behavior="elevate"
+      :color="isDarkTheme ? '' : '#FFEA00'"
     >
-      <v-toolbar-title v-if="$route.meta && $route.meta.appBarTitle" class="font-weight-bold">
-        {{ $route.meta.appBarTitle }}
+      <v-toolbar-title v-if="route.meta && route.meta.appBarTitle" class="font-weight-bold">
+        {{ route.meta.appBarTitle }}
       </v-toolbar-title>
     </v-app-bar>
 
@@ -20,20 +19,18 @@
                 <v-col cols="auto">
                   <v-menu
                     v-model="showMenu"
-                    offset-y
                     elevation="0"
-                    rounded="lg"
-                    nudge-bottom="8px"
+                    class="rounded-lg"
+                    offset="8"
                     :close-on-content-click="false"
                   >
-                    <template #activator="{ on, attrs }">
+                    <template #activator="{ props }">
                       <v-btn
-                        text
+                        v-bind="props"
                         rounded
-                        v-bind="attrs"
-                        v-on="on"
+                        variant="text"
                       >
-                        <v-icon left>
+                        <v-icon>
                           mdi-calendar-range
                         </v-icon>
                         <template v-if="filterSelectedDate[0] === filterSelectedDate[1]">
@@ -51,31 +48,34 @@
                         <v-row no-gutters>
                           <v-col>
                             <v-list
-                              class="grey"
-                              :class="{
-                                grey: !$vuetify.theme.dark,
-                                'lighten-4': !$vuetify.theme.dark,
-                                'darken-3': $vuetify.theme.dark,
-                              }"
                               shaped
-                              dense
+                              density="default"
+                              class="bg-grey"
+                              :class="{
+                                grey: !isDarkTheme,
+                                'lighten-4': !isDarkTheme,
+                                'darken-3': isDarkTheme,
+                              }"
                             >
-                              <v-list-item-group v-model="selectedFilterSelectedDateRange">
-                                <v-list-item
-                                  v-for="range in filterSelectedDateRanges"
-                                  :key="range.range"
-                                  :value="range"
-                                >
-                                  <v-list-item-content class="text-subtitle-2">
-                                    {{ range.text }}
-                                  </v-list-item-content>
+                              <v-list-group>
+                                <template #activator="{ props }">
+                                  <v-list-item
+                                    v-for="range in filterSelectedDateRanges"
+                                    v-bind="props"
+                                    :key="range.range"
+                                    :value="range"
+                                    exact
+                                    rounded="lg"
+                                  >
+                                    <v-list-item-title class="text-subtitle-2">
+                                      {{ range.text }}
+                                    </v-list-item-title>
+                                  </v-list-item>
+                                </template>
+                                <v-list-item value="CUSTOM" class="text-subtitle-2">
+                                  自訂
                                 </v-list-item>
-                                <v-list-item value="CUSTOM">
-                                  <v-list-item-content class="text-subtitle-2">
-                                    自訂
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </v-list-item-group>
+                              </v-list-group>
                             </v-list>
                           </v-col>
                           <v-col>
@@ -86,9 +86,8 @@
                             >
                               <v-date-picker
                                 v-model="filterSelectedDate"
-                                class="rounded-0 date-filter"
-                                range
                                 no-title
+                                class="rounded-0 date-filter"
                                 color="indigo"
                               />
                               <div
@@ -96,8 +95,8 @@
                                 class="d-flex justify-end align-center px-2"
                               >
                                 <v-btn
-                                  elevation="0"
                                   rounded
+                                  elevation="0"
                                   :disabled="applyDateDisabled"
                                   @click="onClickApplyDate"
                                 >
@@ -117,9 +116,9 @@
                   transition="scroll-y-transition"
                 >
                   <v-btn
-                    elevation="0"
-                    text
+                    variant="text"
                     rounded
+                    elevation="0"
                     @click="onClickExport()"
                   >
                     匯出
@@ -132,7 +131,7 @@
                 v-model="currentTab"
                 class="px-4"
                 slider-size="4"
-                :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                :color="isDarkTheme ? 'white' : 'indigo'"
               >
                 <v-tab v-for="tab in tabs" :key="tab.token">
                   {{ tab.text }}
@@ -145,38 +144,35 @@
                     <v-col>
                       <v-text-field
                         v-model.trim="keyword"
-                        dense
+                        density="compact"
                         rounded
-                        filled
-                        label="搜尋"
-                        prepend-inner-icon="mdi-magnify"
+                        variant="filled"
                         hide-details
                         clearable
+                        label="搜尋"
+                        prepend-inner-icon="mdi-magnify"
                         @keypress.enter="getData"
                       />
                     </v-col>
                     <v-col cols="auto">
                       <v-menu
                         class="mt-4"
-                        rounded
-                        offset-y
-                        transition="scroll-y-transition"
-                        :close-on-click="false"
-                        allow-overflow
-                        max-height="500"
                         loading
+                        persistent
+                        max-height="500"
+                        transition="scroll-y-transition"
                         loading-text="資料取得中⋯"
                       >
-                        <template #activator="{ on, attrs }">
+                        <template #activator="{ props }">
                           <v-btn
-                            v-bind="attrs"
-                            elevation="0"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
-                            text
+
+                            variant="text"
                             rounded
-                            v-on="on"
+                            elevation="0"
+                            :color="isDarkTheme ? 'white' : 'indigo'"
+                            v-bind="props"
                           >
-                            <v-icon left>
+                            <v-icon start>
                               mdi-eye
                             </v-icon>
                             查看欄位
@@ -185,11 +181,11 @@
                         <v-card class="pa-4">
                           <v-checkbox
                             v-for="header in optionalHeaders"
-                            :key="header.text"
+                            :key="header.title"
                             v-model="header.display"
-                            dense
-                            :label="header.text"
+                            density="default"
                             hide-details
+                            :label="header.title"
                           />
                         </v-card>
                       </v-menu>
@@ -200,15 +196,15 @@
               <v-data-table
                 v-model="selectedItems"
                 class="rounded-lg"
-                :headers="displayHeaders"
-                :items="items"
-                :loading="tableLoading"
                 item-key="idx"
                 show-expand
                 show-select
                 single-expand
                 :hide-default-footer="true"
                 :disable-pagination="true"
+                :headers="displayHeaders"
+                :items="items"
+                :loading="tableLoading"
               >
                 <template #top>
                   <v-dialog v-model="showAssignDialog" max-width="500px">
@@ -220,33 +216,33 @@
                         <v-card-text>
                           <v-autocomplete
                             v-model="editedItemFormVtigerUser"
-                            filled
+                            variant="filled"
                             rounded
                             label="Vtiger 使用者"
                             hide-details="auto"
                             prepend-inner-icon="mdi-account"
                             :rules="[(v) => !!v || '必填項目']"
                             :items="vTigerUsers"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            :color="isDarkTheme ? 'white' : 'indigo'"
                           />
                           <v-checkbox
                             v-model="isBig"
-                            dense
-                            label="設定為專案型自來客"
                             hide-details
+                            density="default"
+                            label="設定為專案型自來客"
                           ></v-checkbox>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text rounded @click="showAssignDialog = false">
+                          <v-btn variant="text" rounded @click="showAssignDialog = false">
                             取消
                           </v-btn>
                           <v-btn
-                            text
+                            variant="text"
                             rounded
                             :disabled="!editedItemForm"
                             :loading="isSubmittingAssign"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            :color="isDarkTheme ? 'white' : 'indigo'"
                             @click="onClickSaveAssign(editedItem.idx, isBig)"
                           >
                             儲存
@@ -265,27 +261,27 @@
                         <v-card-text>
                           <v-autocomplete
                             v-model="editedItemFormArchiveReason"
-                            filled
+                            variant="filled"
                             rounded
                             label="封存原因"
                             hide-details="auto"
                             prepend-inner-icon="mdi-inbox-arrow-down"
                             :rules="[(v) => !!v || '必填項目']"
                             :items="archiveReasons"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            :color="isDarkTheme ? 'white' : 'indigo'"
                           />
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text rounded @click="showArchiveDialog = false">
+                          <v-btn variant="text" rounded @click="showArchiveDialog = false">
                             取消
                           </v-btn>
                           <v-btn
-                            text
+                            variant="text"
                             rounded
                             :disabled="!editedItemForm"
                             :loading="isSubmittingArchive"
-                            :color="$vuetify.theme.dark ? 'white' : 'indigo'"
+                            :color="isDarkTheme ? 'white' : 'indigo'"
                             @click="onClickSaveArchive(editedItem.idx)"
                           >
                             確定
@@ -301,14 +297,14 @@
                     v-if="item.status === 'NEW'"
                     class="font-weight-bold"
                     color="indigo"
-                    dark
+                    theme="dark"
                   >
                     未指派
                   </v-chip>
-                  <v-chip v-else-if="item.status === 'OPPORTUNITY'" class="font-weight-bold" dark>
+                  <v-chip v-else-if="item.status === 'OPPORTUNITY'" class="font-weight-bold" theme="dark">
                     Opportunity
                   </v-chip>
-                  <v-chip v-else-if="item.status === 'LEAD'" class="font-weight-bold" dark>
+                  <v-chip v-else-if="item.status === 'LEAD'" class="font-weight-bold" theme="dark">
                     Lead
                   </v-chip>
                   <v-chip v-else-if="item.status === 'ARCHIVED'" class="font-weight-bold">
@@ -318,7 +314,7 @@
                 <template #item.service="{ item }">
                   <div v-if="item.service" class="py-2">
                     <div v-for="service in item.service.split(',')" :key="service" class="my-1">
-                      <v-chip x-small>
+                      <v-chip size="x-small">
                         {{ service.trim() }}
                       </v-chip>
                     </div>
@@ -352,104 +348,94 @@
                   </v-btn>
                 </template>
 
-                <template #expanded-item="{ headers, item }">
-                  <td :colspan="headers.length">
+                <template #expanded-item="{ tdHeaders, item }">
+                  <td :colspan="tdHeaders.length">
                     <v-container class="my-4">
                       <v-row justify="center">
                         <v-col cols="12" md="6">
                           <v-card>
-                            <v-list dense>
+                            <v-list density="compact">
                               <v-list-item v-if="item.company">
-                                <v-list-item-content>
-                                  公司名稱
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                公司名稱
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.company }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.businessModel">
-                                <v-list-item-content>
-                                  是否為加盟店
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                是否為加盟店
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.businessModel }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.contact">
-                                <v-list-item-content>
-                                  聯絡人
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                聯絡人
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.contact }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.phone">
-                                <v-list-item-content>
-                                  聯絡電話
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                聯絡電話
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.phone }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.email">
-                                <v-list-item-content>Email</v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                Email
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.email }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.content">
-                                <v-list-item-content>備註</v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                備註
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.content }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item>
-                                <v-list-item-content>
-                                  訂閱電子報
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                訂閱電子報
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.newsletter ? "是" : "否" }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.utmSource">
-                                <v-list-item-content>
-                                  utm_source
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                utm_source
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.utmSource }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.utmMedium">
-                                <v-list-item-content>
-                                  utm_medium
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                utm_medium
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.utmMedium }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.utmCampaign">
-                                <v-list-item-content>
-                                  utm_campaign
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                utm_campaign
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.utmCampaign }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.utmContent">
-                                <v-list-item-content>
-                                  utm_content
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                utm_content
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ item.utmContent }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                               <v-list-item v-if="item.leadTime">
-                                <v-list-item-content>
-                                  Leads 建立時間
-                                </v-list-item-content>
-                                <v-list-item-content class="flex-column align-end text-right">
+                                Leads 建立時間
+
+                                <v-list-item-subtitle class="flex-column align-end text-right">
                                   {{ moment(item.leadTime).format("l LT") }}
-                                </v-list-item-content>
+                                </v-list-item-subtitle>
                               </v-list-item>
                             </v-list>
                           </v-card>
@@ -472,9 +458,16 @@ import moment from 'moment';
 import {
   ref, reactive, computed, watch, onBeforeMount, Ref,
 } from 'vue';
+import { useTheme } from 'vuetify';
+import { useRoute } from 'vue-router';
 // eslint-disable-next-line import/no-cycle
 import Axios from '@/helpers/axios';
+import type { VDataTable } from 'vuetify/labs';
 
+type VDataTableHeaders = VDataTable['$props']['headers']
+
+const theme = useTheme();
+const route = useRoute();
 const showMenu = ref(false);
 const filterSelectedDateRanges = ref([
   {
@@ -617,9 +610,9 @@ const archiveReasons = ref([
   '自來客無效-重複名單',
 ]);
 const tableLoading = ref(false);
-const headers = ref([
+const headers = ref<VDataTableHeaders[]>([
   {
-    text: '名單狀態',
+    title: '名單狀態',
     align: 'start',
     sortable: false,
     value: 'status',
@@ -628,7 +621,7 @@ const headers = ref([
     exportSort: 21,
   },
   {
-    text: '品牌名稱',
+    title: '品牌名稱',
     align: 'start',
     sortable: false,
     value: 'name',
@@ -637,7 +630,7 @@ const headers = ref([
     exportSort: 1,
   },
   {
-    text: '地區',
+    title: '地區',
     align: 'start',
     sortable: false,
     value: 'location',
@@ -646,7 +639,7 @@ const headers = ref([
     exportSort: 5,
   },
   {
-    text: '分店數量',
+    title: '分店數量',
     align: 'start',
     sortable: false,
     value: 'storeCount',
@@ -655,7 +648,7 @@ const headers = ref([
     exportSort: 6,
   },
   {
-    text: '產業類別',
+    title: '產業類別',
     align: 'start',
     sortable: false,
     value: 'type',
@@ -664,7 +657,7 @@ const headers = ref([
     exportSort: 8,
   },
   {
-    text: '備註',
+    title: '備註',
     align: 'center',
     sortable: false,
     value: 'content',
@@ -673,7 +666,7 @@ const headers = ref([
     exportSort: 3,
   },
   {
-    text: '名單建立時間',
+    title: '名單建立時間',
     align: 'center',
     sortable: false,
     value: 'time',
@@ -682,7 +675,7 @@ const headers = ref([
     exportSort: 20,
   },
   {
-    text: '是否有營登',
+    title: '是否有營登',
     align: 'start',
     sortable: false,
     value: 'registered',
@@ -691,7 +684,7 @@ const headers = ref([
     exportSort: 7,
   },
   {
-    text: '名單指派業務',
+    title: '名單指派業務',
     align: 'center',
     sortable: false,
     value: 'assigned',
@@ -700,7 +693,7 @@ const headers = ref([
     exportSort: 23,
   },
   {
-    text: '封存',
+    title: '封存',
     align: 'center',
     sortable: false,
     value: 'archive',
@@ -708,7 +701,7 @@ const headers = ref([
     display: true,
   },
   {
-    text: '了解服務',
+    title: '了解服務',
     align: 'start',
     sortable: false,
     value: 'service',
@@ -718,7 +711,7 @@ const headers = ref([
     exportSort: 9,
   },
   {
-    text: '',
+    title: '',
     value: 'data-table-expand',
     display: true,
   },
@@ -880,6 +873,8 @@ const isBig = ref(false);
 // computed
 //
 
+const isDarkTheme = computed(() => theme.global.name.value === 'dark');
+
 const optionalHeaders = computed(() => headers.value.filter((header) => !header.display));
 
 const displayHeaders = computed(() => headers.value.filter((header) => header.display));
@@ -889,12 +884,12 @@ const csvFields = computed(() => {
 
   headers.value.forEach((item) => {
     if (
-      item.text === ''
+      item.title === ''
       || item.value === 'archive'
       || item.exportSort === undefined
     ) return;
     fields.push({
-      label: item.text,
+      label: item.title,
       value: item.value,
       exportSort: item.exportSort,
     });

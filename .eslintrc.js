@@ -8,17 +8,29 @@ module.exports = {
   parser: 'vue-eslint-parser',
   extends: [
     'eslint:recommended',
+    '@vue/eslint-config-airbnb',
     '@vue/typescript/recommended',
     'plugin:vue/vue3-recommended',
-    '@vue/eslint-config-airbnb',
+    'plugin:vuetify/base',
+    'plugin:import/typescript',
   ],
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module',
+    ecmaVersion: 2020,
   },
   plugins: [
+    'vue',
     'vuetify',
-    '@typescript-eslint',
   ],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: 'tsconfig.json',
+      },
+    },
+  },
   rules: {
     ...rules,
     'vuetify/no-deprecated-classes': 'error',
@@ -27,9 +39,18 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-var-requires': 0,
     'vue/valid-v-slot': [
       'error', {
         allowModifiers: true,
+      },
+    ],
+    'import/extensions': [
+      'error', 'ignorePackages', {
+        js: 'never',
+        mjs: 'never',
+        jsx: 'never',
+        ts: 'never',
       },
     ],
   },

@@ -1,25 +1,35 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify';
+import { createVuetify } from 'vuetify';
+import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import zhHant from '@/i18n/zh-Hant';
-import 'vuetify/dist/vuetify.min.css';
+import 'vuetify/styles';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
   theme: {
+    defaultTheme: 'light',
     themes: {
       light: {
-        brand: '#ffea00',
-        background: '#f6f6f7',
+        colors: {
+          brand: '#ffea00',
+          background: '#f6f6f7',
+        },
       },
       dark: {
-        brand: '#ffea00',
-        primary: '#ffea00',
+        colors: {
+          brand: '#ffea00',
+          primary: '#ffea00',
+        },
       },
     },
   },
-  lang: {
-    locales: { zhHant },
-    current: 'zhHant',
+  locale: {
+    locale: 'zhHant',
+    messages: { zhHant },
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
   },
 });

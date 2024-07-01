@@ -1,9 +1,6 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig, RouterOptions } from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-Vue.use(VueRouter);
-
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/contact-us',
     name: 'contact-us',
@@ -12,12 +9,10 @@ const routes: RouteConfig[] = [
   },
 ];
 
-const routerOptions: RouterOptions = {
-  mode: 'hash',
-  base: process.env.BASE_URL,
-  routes,
-};
-
-const router = new VueRouter(routerOptions);
+const router = createRouter({
+  history: createWebHistory(),
+  routes: routes as RouteRecordRaw[],
+  scrollBehavior: () => { return { left: 0, top: 0 }; },
+});
 
 export default router;
